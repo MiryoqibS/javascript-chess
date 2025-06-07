@@ -1,0 +1,9 @@
+// Base styles
+@use "./reset";
+@use "./variables";
+@use "./global";
+
+// Components
+@use "./board";
+@use "./cell";
+@use "./piece";
