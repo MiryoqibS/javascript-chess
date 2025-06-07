@@ -1,0 +1,6 @@
+@use "./variables" as v;
+
+.piece {
+    width: 100%;
+    box-shadow: v.$piece-shadow;
+}

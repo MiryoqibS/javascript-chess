@@ -1,0 +1,8 @@
+@use "./variables" as v;
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(8, v.$cell-size);
+    grid-template-rows: repeat(8, v.$cell-size);
+    border: v.$board-border;
+}

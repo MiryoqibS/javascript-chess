@@ -1,0 +1,21 @@
+@use "./variables" as v;
+
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1/1;
+    position: relative;
+
+    &:has(img) {
+        cursor: pointer;
+    }
+
+    &.light {
+        background-color: v.$color-board-light;
+    }
+
+    &.dark {
+        background-color: v.$color-board-dark;
+    }
+}
