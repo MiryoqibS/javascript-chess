@@ -6,6 +6,7 @@ export class BoardRender {
         this.root = root;
         this.selectedPieceElement = null;
         this.selectedPieceObject = {};
+        this.availableCells = [];
     }
 
     render() {
@@ -36,6 +37,7 @@ export class BoardRender {
                             this.selectedPieceElement = target;
                             this.selectedPieceObject = targetPiece;
                             this.selectedPieceElement.classList.add("selected");
+                            this.renderHighlights(targetPiece, cellRow, cellCol);
                             return;
                         };
 
@@ -78,6 +80,9 @@ export class BoardRender {
                     this.selectedPieceElement.classList.remove("selected");
                     this.selectedPieceElement = null;
                     this.selectedPieceObject = null;
+
+                    // Очищаем все подсвеченные cell
+                    this.clearHighlights();
                 });
 
                 // Определение цвета ячейки
@@ -105,5 +110,32 @@ export class BoardRender {
         };
 
         this.root.appendChild(board);
+    }
+
+    renderHighlights(targetPiece, fromRow, fromCol) {
+        const moves = this.boardLogic.getAvailablePieceMoves(targetPiece, fromRow, fromCol);
+
+        for (const { row, col } of moves) {
+            const targetCell = document.querySelector(`.cell[position-row="${row}"][position-col="${col}"]`);
+            if (targetCell) {
+                this.availableCells.push(targetCell);
+                targetCell.classList.add("available-move");
+                const highlightCircle = document.createElement("span");
+                highlightCircle.classList.add("cell__move-circle");
+                targetCell.appendChild(highlightCircle);
+            };
+        };
+    }
+
+    clearHighlights() {
+        this.availableCells.forEach(cell => {
+            cell.classList.remove("available-move");
+            const highlightCircle = cell.querySelector(".cell__move-circle");
+            if (highlightCircle) {
+                highlightCircle.remove();
+            };
+        });
+
+        this.availableCells = [];
     }
 }

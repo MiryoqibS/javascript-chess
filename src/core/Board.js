@@ -37,7 +37,7 @@ export class Board {
         if (this.grid[row][col]) {
             return false;
         };
-        
+
         return true;
     }
 
@@ -49,6 +49,30 @@ export class Board {
         const piece = this.getPiece(fromRow, fromCol);
         this.setPiece(toRow, toCol, piece);
         this.setPiece(fromRow, fromCol, null);
+    }
+
+    getAvailablePieceMoves(piece, fromRow, fromCol) {
+        const moves = [];
+
+        for (let toRow = 0; toRow < this.grid.length; toRow++) {
+            for (let toCol = 0; toCol < 8; toCol++) {
+                if (toRow === fromRow && toCol === fromCol) continue;
+
+                const targetPiece = this.getPiece(toRow, toCol);
+                
+                if (targetPiece) {
+                    if (piece.canEat(fromRow, fromCol, toRow, toCol, targetPiece)) {
+                        moves.push({row: toRow, col: toCol});
+                    };
+                } else {
+                    if (piece.canMove(fromRow, fromCol, toRow, toCol)) {
+                        moves.push({row: toRow, col: toCol});
+                    };
+                };
+            };
+        };
+
+        return moves;
     }
 };
 
