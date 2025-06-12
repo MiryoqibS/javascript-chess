@@ -18,4 +18,23 @@
     &.dark {
         background-color: v.$color-board-dark;
     }
+
+    &.available-move {
+        outline: 3px solid v.$highlight-move;
+        outline-offset: -3px;
+        border-radius: 4px;
+        box-shadow: 0 0 10px v.$highlight-move;
+    }
+
+    &__move-circle {
+        display: block;
+        width: 10%;
+        height: 10%;
+        border-radius: 50%;
+        background-color: v.$highlight-move;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }

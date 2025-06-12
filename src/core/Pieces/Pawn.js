@@ -29,8 +29,6 @@ export class Pawn extends Piece {
     canEat(fromY, fromX, toY, toX, target) {
         const directionX = fromX - toX;
         const directionY = toY - fromY;
-        console.log(target);
-        
 
         const forward = this.color === "w" ? -1 : 1;
         const isDiagonal = Math.abs(directionX) === 1 && directionY === forward;

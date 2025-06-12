@@ -5,9 +5,9 @@
     box-shadow: v.$piece-shadow;
 
     &.selected {
-        outline: 3px solid gold;
+        outline: 3px solid v.$selected-piece;
         outline-offset: -3px;
         border-radius: 4px;
-        box-shadow: 0 0 10px gold;
+        box-shadow: 0 0 10px v.$selected-piece;
     }
 }
