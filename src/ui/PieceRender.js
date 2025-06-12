@@ -1,8 +1,10 @@
 export class PieceRender {
-    constructor({type, color, imagePath}) {
+    constructor({type, color, imagePath}, board, position) {
         this.type = type;
         this.color = color;
         this.imagePath = imagePath;
+        this.board = board;
+        this.position = position;
     }
 
     render() {
