@@ -28,6 +28,28 @@ export class Board {
             this.grid[7][i] = new order[i]("w");
         };
     }
+
+    getPiece(row, col) {
+        return this.grid[row][col];
+    }
+
+    isEmpty(row, col) {
+        if (this.grid[row][col]) {
+            return false;
+        };
+        
+        return true;
+    }
+
+    setPiece(row, col, piece) {
+        this.grid[row][col] = piece;
+    }
+
+    movePiece(fromRow, fromCol, toRow, toCol) {
+        const piece = this.getPiece(fromRow, fromCol);
+        this.setPiece(toRow, toCol, piece);
+        this.setPiece(fromRow, fromCol, null);
+    }
 };
 
 const board = new Board();

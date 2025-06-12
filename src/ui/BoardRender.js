@@ -23,39 +23,61 @@ export class BoardRender {
                 // Движение фигур
                 cell.addEventListener("click", (e) => {
                     const target = e.target;
+                    const isPiece = target.classList.contains("piece");
 
-                    // Проверка target является ли он фигурой
-                    if (target.classList.contains("piece")) {
-                        // Выбираем фигуру
-                        this.selectedPieceElement = target;
+                    let cellRow = +cell.getAttribute("position-row");
+                    let cellCol = +cell.getAttribute("position-col");
+                    const targetPiece = this.boardLogic.getPiece(+cellRow, +cellCol);
 
-                        // Определяем позицию фигуры в grid (игровая доска) массиве 
-                        let cellRow = cell.getAttribute("position-row");
-                        let cellCol = cell.getAttribute("position-col");
+                    // <= 1 - Клик по фигуре =>
+                    if (isPiece) {
+                        if (!this.selectedPieceElement) {
+                            // Выбираем фигуру
+                            this.selectedPieceElement = target;
+                            this.selectedPieceObject = targetPiece;
+                            this.selectedPieceElement.classList.add("selected");
+                            return;
+                        };
 
-                        // Выбираем объект фигуры из grid массива
-                        this.selectedPieceObject = this.boardLogic.grid[+cellRow][+cellCol];
-                    } else if (this.selectedPieceElement) {
-                        console.log(this.selectedPieceObject);
-                        
                         // Позиция из которой была выбрана фигура
                         let selectedCellRow = +this.selectedPieceElement.closest(".cell").getAttribute("position-row");
                         let selectedCellCol = +this.selectedPieceElement.closest(".cell").getAttribute("position-col");
-                        // Позиция на которую хочет перейти
-                        let cellRow = +cell.getAttribute("position-row");
-                        let cellCol = +cell.getAttribute("position-col");
 
-                        if (this.selectedPieceObject.canMove(selectedCellRow, selectedCellCol, cellRow, cellCol)) {
+                        // Может ли фигура съесть другую фигуру
+                        if (this.selectedPieceObject.canEat(selectedCellRow, selectedCellCol, cellRow, cellCol, targetPiece)) {
+                            this.boardLogic.setPiece(cellRow, cellCol, this.selectedPieceObject);
+                            this.boardLogic.setPiece(selectedCellRow, selectedCellCol, null);
+
+                            cell.innerHTML = "";
                             cell.appendChild(this.selectedPieceElement);
-                            this.selectedPieceElement = null;
-                            this.boardLogic.grid[+cellRow][+cellCol] = this.selectedPieceObject;
+                        };
+                    };
+
+                    // <= 2 - Клик по пустой клетке =>
+                    if (this.selectedPieceElement) {
+                        console.log(this.selectedPieceObject);
+                        // Позиция из которой была выбрана фигура
+                        let selectedCellRow = +this.selectedPieceElement.closest(".cell").getAttribute("position-row");
+                        let selectedCellCol = +this.selectedPieceElement.closest(".cell").getAttribute("position-col");
+
+                        const canMove = this.selectedPieceObject.canMove(selectedCellRow, selectedCellCol, cellRow, cellCol);
+                        if (canMove && this.boardLogic.isEmpty(cellRow, cellCol)) {
+                            cell.appendChild(this.selectedPieceElement);
+                            this.boardLogic.movePiece(selectedCellRow, selectedCellCol, cellRow, cellCol);
 
                             // Проверка фигуры является ли она пешкой 
                             if (this.selectedPieceObject.type === "pawn") {
                                 this.selectedPieceObject.isFirstStep = false;
                             };
+
+                            console.log(this.boardLogic.grid);
                         }
                     };
+
+                    // Обнуляем выделенный элемент и его объект
+                    this.selectedPieceElement.classList.remove("selected");
+                    this.selectedPieceElement = null;
+                    this.selectedPieceObject = null;
                 });
 
                 // Определение цвета ячейки
