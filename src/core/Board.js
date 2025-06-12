@@ -1,4 +1,9 @@
-import { Piece } from "./Piece.js";
+import { Pawn } from "./Pieces/Pawn.js";
+import { Rook } from "./Pieces/Rook.js";
+import { Knight } from "./Pieces/Knight.js"
+import { Bishop } from "./Pieces/Bishop.js"
+import { Queen } from "./Pieces/Queen.js";
+import { King } from "./Pieces/King.js";
 
 export class Board {
     constructor() {
@@ -11,16 +16,16 @@ export class Board {
     }
 
     setupPieces() {
-        const order = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook'];
+        const order = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook];
 
         for (let i = 0; i < 8; i++) {
             // Чёрные
-            this.grid[0][i] = new Piece(order[i], "b")
-            this.grid[1][i] = new Piece("pawn", "b");
+            this.grid[0][i] = new order[i]("b");
+            this.grid[1][i] = new Pawn("b");
 
             // Белые
-            this.grid[6][i] = new Piece("pawn", "w");
-            this.grid[7][i] = new Piece(order[i], "w");
+            this.grid[6][i] = new Pawn("w");
+            this.grid[7][i] = new order[i]("w");
         };
     }
 };
