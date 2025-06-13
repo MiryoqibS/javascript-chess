@@ -34,11 +34,14 @@ export class Board {
     }
 
     isEmpty(row, col) {
-        if (this.grid[row][col]) {
+        if (
+            row < 0 || col >= 8 ||
+            col < 0 || row >= 8
+        ) {
             return false;
         };
 
-        return true;
+        return this.grid[row][col] === null;
     }
 
     setPiece(row, col, piece) {
