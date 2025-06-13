@@ -46,7 +46,7 @@ export class BoardRender {
                         let selectedCellCol = +this.selectedPieceElement.closest(".cell").getAttribute("position-col");
 
                         // Может ли фигура съесть другую фигуру
-                        if (this.selectedPieceObject.canEat(selectedCellRow, selectedCellCol, cellRow, cellCol, targetPiece)) {
+                        if (this.selectedPieceObject.canEat(selectedCellRow, selectedCellCol, cellRow, cellCol, targetPiece, this.boardLogic)) {
                             this.boardLogic.setPiece(cellRow, cellCol, this.selectedPieceObject);
                             this.boardLogic.setPiece(selectedCellRow, selectedCellCol, null);
 
@@ -62,7 +62,7 @@ export class BoardRender {
                         let selectedCellRow = +this.selectedPieceElement.closest(".cell").getAttribute("position-row");
                         let selectedCellCol = +this.selectedPieceElement.closest(".cell").getAttribute("position-col");
 
-                        const canMove = this.selectedPieceObject.canMove(selectedCellRow, selectedCellCol, cellRow, cellCol);
+                        const canMove = this.selectedPieceObject.canMove(selectedCellRow, selectedCellCol, cellRow, cellCol, this.boardLogic);
                         if (canMove && this.boardLogic.isEmpty(cellRow, cellCol)) {
                             cell.appendChild(this.selectedPieceElement);
                             this.boardLogic.movePiece(selectedCellRow, selectedCellCol, cellRow, cellCol);

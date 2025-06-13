@@ -61,11 +61,11 @@ export class Board {
                 const targetPiece = this.getPiece(toRow, toCol);
                 
                 if (targetPiece) {
-                    if (piece.canEat(fromRow, fromCol, toRow, toCol, targetPiece)) {
+                    if (piece.canEat(fromRow, fromCol, toRow, toCol, targetPiece, this)) {
                         moves.push({row: toRow, col: toCol});
                     };
                 } else {
-                    if (piece.canMove(fromRow, fromCol, toRow, toCol)) {
+                    if (piece.canMove(fromRow, fromCol, toRow, toCol, this)) {
                         moves.push({row: toRow, col: toCol});
                     };
                 };
