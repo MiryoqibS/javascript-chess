@@ -1,12 +1,13 @@
 import { PieceRender } from "./PieceRender";
 
 export class BoardRender {
-    constructor(board, root) {
+    constructor(board, root, headerRender) {
         this.boardLogic = board;
         this.root = root;
         this.selectedPieceElement = null;
         this.selectedPieceObject = {};
         this.availableCells = [];
+        this.headerRender = headerRender;
     }
 
     render() {
@@ -24,7 +25,9 @@ export class BoardRender {
                 // Движение фигур
                 cell.addEventListener("click", (e) => {
                     const target = e.target;
+                    const playerTurn = this.boardLogic.playerTurn === "w" ? "white" : "black";
                     const isPiece = target.classList.contains("piece");
+                    const isPlayerPiece = target.classList.contains(playerTurn);
 
                     let cellRow = +cell.getAttribute("position-row");
                     let cellCol = +cell.getAttribute("position-col");
@@ -32,7 +35,8 @@ export class BoardRender {
 
                     // <= 1 - Клик по фигуре =>
                     if (isPiece) {
-                        if (!this.selectedPieceElement) {
+                        // Если не выбрана фигура
+                        if (!this.selectedPieceElement && isPlayerPiece) {
                             // Выбираем фигуру
                             this.selectedPieceElement = target;
                             this.selectedPieceObject = targetPiece;
@@ -41,17 +45,24 @@ export class BoardRender {
                             return;
                         };
 
-                        // Позиция из которой была выбрана фигура
-                        let selectedCellRow = +this.selectedPieceElement.closest(".cell").getAttribute("position-row");
-                        let selectedCellCol = +this.selectedPieceElement.closest(".cell").getAttribute("position-col");
+                        // Если выбрана фигура
+                        if (this.selectedPieceElement) {
+                            // Позиция из которой была выбрана фигура
+                            let selectedCellRow = +this.selectedPieceElement.closest(".cell").getAttribute("position-row");
+                            let selectedCellCol = +this.selectedPieceElement.closest(".cell").getAttribute("position-col");
 
-                        // Может ли фигура съесть другую фигуру
-                        if (this.selectedPieceObject.canEat(selectedCellRow, selectedCellCol, cellRow, cellCol, targetPiece, this.boardLogic)) {
-                            this.boardLogic.setPiece(cellRow, cellCol, this.selectedPieceObject);
-                            this.boardLogic.setPiece(selectedCellRow, selectedCellCol, null);
+                            // Может ли фигура съесть другую фигуру
+                            const canEat = this.selectedPieceObject && this.selectedPieceObject.canEat(selectedCellRow, selectedCellCol, cellRow, cellCol, targetPiece, this.boardLogic);
 
-                            cell.innerHTML = "";
-                            cell.appendChild(this.selectedPieceElement);
+                            if (canEat) {
+                                this.boardLogic.setPiece(cellRow, cellCol, this.selectedPieceObject);
+                                this.boardLogic.setPiece(selectedCellRow, selectedCellCol, null);
+                                this.boardLogic.changePlayerTurn();
+                                this.headerRender.update();
+
+                                cell.innerHTML = "";
+                                cell.appendChild(this.selectedPieceElement);
+                            };
                         };
                     };
 
@@ -66,18 +77,19 @@ export class BoardRender {
                         if (canMove && this.boardLogic.isEmpty(cellRow, cellCol)) {
                             cell.appendChild(this.selectedPieceElement);
                             this.boardLogic.movePiece(selectedCellRow, selectedCellCol, cellRow, cellCol);
+                            this.headerRender.update();
 
                             // Проверка фигуры является ли она пешкой 
                             if (this.selectedPieceObject.type === "pawn") {
                                 this.selectedPieceObject.isFirstStep = false;
                             };
-
-                            console.log(this.boardLogic.grid);
-                        }
+                        };
                     };
 
                     // Обнуляем выделенный элемент и его объект
-                    this.selectedPieceElement.classList.remove("selected");
+                    if (this.selectedPieceElement) {
+                        this.selectedPieceElement.classList.remove("selected");
+                    };
                     this.selectedPieceElement = null;
                     this.selectedPieceObject = null;
 

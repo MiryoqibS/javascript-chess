@@ -4,6 +4,13 @@
 @use "./global";
 
 // Components
+@use "./header";
 @use "./board";
 @use "./cell";
 @use "./piece";
+
+#app {
+    display: flex;
+    flex-direction: column;
+    row-gap: 32px;
+}

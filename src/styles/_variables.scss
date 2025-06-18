@@ -5,6 +5,8 @@ $color-board-dark: #b58863; // тёмная клетка
 // Цвета фигур
 $color-piece-white: #ffffff;
 $color-piece-black: #000000;
+$color-white: #ffffff;
+$color-black: #000000; 
 
 // Размеры
 $cell-size: 64px; // размер клетки
@@ -21,3 +23,5 @@ $app-background: #282c34;
 
 // Цвет выделенной фигуры
 $selected-piece: #ffd700; // Золотой
+
+$font-base: "Verdana", sans-serif;

@@ -6,7 +6,7 @@ export class King extends Piece {
         this.type = "king";
     }
 
-    canMove(fromY, fromX, toY, toX, boardLogic) {
+    canMove(fromY, fromX, toY, toX) {
         const directionX = Math.abs(fromX - toX);
         const directionY = Math.abs(fromY - toY);
 
