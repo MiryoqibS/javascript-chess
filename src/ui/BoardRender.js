@@ -55,6 +55,8 @@ export class BoardRender {
                             const canEat = this.selectedPieceObject && this.selectedPieceObject.canEat(selectedCellRow, selectedCellCol, cellRow, cellCol, targetPiece, this.boardLogic);
 
                             if (canEat) {
+                                const capturedPiece = this.boardLogic.getPiece(cellRow, cellCol);
+                                this.boardLogic.capturedPiece(capturedPiece);
                                 this.boardLogic.setPiece(cellRow, cellCol, this.selectedPieceObject);
                                 this.boardLogic.setPiece(selectedCellRow, selectedCellCol, null);
                                 this.boardLogic.changePlayerTurn();

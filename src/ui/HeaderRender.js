@@ -13,7 +13,7 @@ export class HeaderRender {
     render() {
         const header = document.createElement("header");
         header.className = "header";
-        
+
         const players = [
             {
                 name: "Whites",
@@ -26,41 +26,80 @@ export class HeaderRender {
         ];
 
         for (const player of players) {
-            const playerElement = document.createElement("div");
-            playerElement.className = "header-player";
+            const playerPanel = document.createElement("div");
+            playerPanel.className = "player-panel";
+
+            const playerPanelHeader = document.createElement("div");
+            playerPanelHeader.className = "player-panel__header";
 
             // Пока что сделаем отображение только цвета на аватаре так как нету мультиплеера
-            const playerElementPhoto = document.createElement("span");
-            playerElementPhoto.className = "header-player__photo";
+            const playerPanelPhoto = document.createElement("span");
+            playerPanelPhoto.className = "player-panel__photo";
 
             if (player.color === "w") {
-                playerElementPhoto.classList.add("white");
+                playerPanelPhoto.classList.add("white");
             } else {
-                playerElementPhoto.classList.add("black");
+                playerPanelPhoto.classList.add("black");
             };
 
-            const playerElementInfo = document.createElement("div");
-            playerElementInfo.className = "header-player__info";
+            // Информация об игроке
+            const playerPanelDetails = document.createElement("div");
+            playerPanelDetails.className = "player-panel__details";
 
-            const playerElementTitle = document.createElement("h3");
-            playerElementTitle.innerText = player.name;
-            playerElementTitle.className = "header-player__title";
+            const playerPanelTitle = document.createElement("h3");
+            playerPanelTitle.innerText = player.name;
+            playerPanelTitle.className = "player-panel__title";
 
-            const playerElementTurn = document.createElement("p");
-            playerElementTurn.className = "header-player__turn";
-            playerElementTurn.innerText = "• Turn";
+            const playerPanelTurn = document.createElement("p");
+            playerPanelTurn.className = "player-panel__turn";
+            playerPanelTurn.innerText = "• Turn";
 
             if (this.boardLogic.playerTurn !== player.color) {
-                playerElementTurn.classList.add("hide");
+                playerPanelTurn.classList.add("hide");
             };
 
-            playerElementInfo.appendChild(playerElementTitle);
-            playerElementInfo.appendChild(playerElementTurn);
+            // Сведенные фигуры
+            const playerPanelCaptured = document.createElement("div");
+            playerPanelCaptured.className = "player-panel__captured";
 
-            playerElement.appendChild(playerElementPhoto);
-            playerElement.appendChild(playerElementInfo);
+            if (player.color === "w") {
+                const capturedPieces = this.boardLogic.allCaptured;
 
-            header.appendChild(playerElement);
+                capturedPieces.white.forEach(piece => {
+                    console.log(piece);
+                    
+                    const pieceElement = document.createElement("img");
+                    pieceElement.src = piece.imagePath;
+
+                    playerPanelCaptured.appendChild(pieceElement);
+                });
+            } else {
+                const capturedPieces = this.boardLogic.allCaptured;
+
+                capturedPieces.black.forEach(piece => {
+                    console.log(piece);
+
+                    const pieceElement = document.createElement("img");
+                    pieceElement.src = piece.imagePath;
+
+                    playerPanelCaptured.appendChild(pieceElement);
+                });
+            };
+
+            // Группируем информацию об игроке
+            playerPanelDetails.appendChild(playerPanelTitle);
+            playerPanelDetails.appendChild(playerPanelTurn);
+
+            // Группируем header
+            playerPanelHeader.appendChild(playerPanelPhoto)
+            playerPanelHeader.appendChild(playerPanelDetails)
+
+            // Добавляем дочерние элементы в панель
+            playerPanel.appendChild(playerPanelHeader);
+            playerPanel.appendChild(playerPanelCaptured);
+
+            // Добавляем панель игрока в header
+            header.appendChild(playerPanel);
         };
 
         return header;

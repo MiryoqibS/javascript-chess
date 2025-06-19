@@ -10,6 +10,8 @@ export class Board {
         this.grid = this.createGrid();
         this.setupPieces();
         this.playerTurn = "w";
+        this.capturedByWhite = [];
+        this.capturedByBlack = [];
     }
 
     createGrid() {
@@ -56,6 +58,24 @@ export class Board {
 
     changePlayerTurn() {
         this.playerTurn = this.playerTurn === "w" ? "b" : "w";
+    }
+
+    capturedPiece(capturedPiece) {
+        console.log(this);
+        
+
+        if (capturedPiece.color === "w") {
+            this.capturedByBlack.push(capturedPiece);
+        } else {
+            this.capturedByWhite.push(capturedPiece);
+        };
+    }
+
+    get allCaptured() {
+        return {
+            white: this.capturedByWhite,
+            black: this.capturedByBlack,
+        };
     }
 
     getAvailablePieceMoves(piece, fromRow, fromCol) {

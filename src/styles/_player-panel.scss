@@ -1,0 +1,80 @@
+@use "./variables" as v;
+
+.player-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    row-gap: 10px;
+
+    &:nth-of-type(2) {
+        align-items: end;
+
+        .player-panel__header {
+            flex-direction: row-reverse;
+        }
+
+        .player-panel__details {
+            align-items: end;
+        }
+
+        .player-panel__captured {
+            background-color: v.$color-black;
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        column-gap: 10px;
+    }
+
+    &__photo {
+        height: 40px;
+        aspect-ratio: 1/1;
+    }
+
+    &__photo.white {
+        background-color: v.$color-white;
+    }
+
+    &__photo.black {
+        background-color: v.$color-black;
+    }
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        row-gap: 4px;
+        align-items: start;
+    }
+
+    &__title {
+        font-weight: 600;
+        font-size: 20px;
+    }
+
+    &__turn {
+        color: #098909;
+        font-size: 12px;
+        text-transform: lowercase;
+        font-weight: 500;
+
+        &.hide {
+            visibility: hidden;
+        }
+    }
+
+    &__captured {
+        display: grid;
+        grid-template-columns: repeat(6, 24px);
+        position: relative;
+        align-items: end;
+        column-gap: 2px;
+        background-color: v.$color-white;
+        border-radius: 4px;
+
+        img {
+            width: 100%;
+        }
+    }
+}
