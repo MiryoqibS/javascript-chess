@@ -54,6 +54,10 @@ export class Board {
         this.setPiece(fromRow, fromCol, null);
 
         this.changePlayerTurn();
+
+        if (this.isCheckmate(this.playerTurn)) {
+            alert(`${this.playerTurn === "w" ? "Black" : "White"} wins by checkmate!`);
+        };
     }
 
     changePlayerTurn() {
@@ -62,7 +66,6 @@ export class Board {
 
     capturedPiece(capturedPiece) {
         console.log(this);
-        
 
         if (capturedPiece.color === "w") {
             this.capturedByBlack.push(capturedPiece);
@@ -70,6 +73,55 @@ export class Board {
             this.capturedByWhite.push(capturedPiece);
         };
     }
+
+    isCheckmate(playerColor) {
+        const king = this.findKing(playerColor);
+        if (!king) return false;
+
+        const { row, col } = king.position;
+
+        const availableMoves = this.getAvailablePieceMoves(king, row, col);
+        const isKingUnderAttack = this.isKingUnderAttack(playerColor, row, col);
+
+        if (isKingUnderAttack && availableMoves.length === 0) {
+            return true;
+        };
+
+        return false;
+    };
+
+    findKing(playerColor) {
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < 8; col++) {
+                const piece = this.getPiece(row, col);
+                if (piece && piece.type === "king" && piece.color === playerColor) {
+                    piece.position = { row, col };
+                    return piece;
+                };
+            };
+        };
+
+        return null;
+    }
+
+    isKingUnderAttack(playerColor, kingRowPosition, kingColPosition) {
+        const opponentColor = playerColor === "w" ? "b" : "w";
+
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < 8; col++) {
+                const piece = this.getPiece(row, col);
+
+                if (piece && piece.color === opponentColor) {
+                    const kingTarget = this.getPiece(kingRowPosition, kingColPosition);
+                    if (piece.canEat(row, col, kingRowPosition, kingColPosition, kingTarget, this)) {
+                        return true;
+                    };
+                };
+            };
+        };
+
+        return false;
+    };
 
     get allCaptured() {
         return {

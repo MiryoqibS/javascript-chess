@@ -1,13 +1,20 @@
 import { PieceRender } from "./PieceRender";
 
 export class BoardRender {
-    constructor(board, root, headerRender) {
+    constructor(board, root, headerRender, customAlert) {
         this.boardLogic = board;
         this.root = root;
         this.selectedPieceElement = null;
         this.selectedPieceObject = {};
         this.availableCells = [];
         this.headerRender = headerRender;
+        this.customAlert = customAlert;
+    }
+
+    init() {
+        const board = this.render();
+
+        this.root.appendChild(board);
     }
 
     render() {
@@ -64,6 +71,15 @@ export class BoardRender {
 
                                 cell.innerHTML = "";
                                 cell.appendChild(this.selectedPieceElement);
+
+                                if (this.boardLogic.isCheckmate(this.boardLogic.playerTurn)) {
+                                    const king = this.boardLogic.findKing(this.boardLogic.playerTurn === "w" ? "b" : "w");
+                                    const alertIcon = king.imagePath;
+                                    const alertTitle = `The ${this.boardLogic.playerTurn === "w" ? "Blacks" : "Whites"} won!`
+                                    const alertMessage = `${this.boardLogic.playerTurn === "w" ? "Black" : "White"} wins by checkmate!`
+                                    this.customAlert.init(alertIcon, alertTitle, alertMessage);
+                                    this.customAlert.show();
+                                };
                             };
                         };
                     };
@@ -123,7 +139,7 @@ export class BoardRender {
             };
         };
 
-        this.root.appendChild(board);
+        return board;
     }
 
     renderHighlights(targetPiece, fromRow, fromCol) {

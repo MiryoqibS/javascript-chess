@@ -1,0 +1,120 @@
+@use "sass:math";
+
+// Количество частиц
+$particles: 50;
+$width: 500;
+$height: 500;
+
+$box-shadow: (
+);
+$box-shadow2: (
+);
+
+@for $i from 0 through $particles {
+    $box-shadow: $box-shadow,
+        (math.random() * $width - math.div($width, 2)) + px (math.random() * $height - math.div($height, 1.5)) + px hsl(math.random() * 360, 100%, 50%);
+
+    $box-shadow2: $box-shadow2, 0 0 #fff;
+}
+
+@mixin keyframes($name) {
+    @keyframes #{$name} {
+        @content;
+    }
+}
+
+@mixin animation($settings...) {
+    animation: $settings;
+}
+
+@mixin transform($value) {
+    transform: $value;
+}
+
+// Вспышка частиц
+@include keyframes(bang) {
+    0% {
+        box-shadow: $box-shadow2;
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        box-shadow: $box-shadow;
+        opacity: 0;
+    }
+}
+
+// Падение вниз
+@include keyframes(gravity) {
+    0% {
+        @include transform(translateY(0));
+        opacity: 1;
+    }
+
+    100% {
+        @include transform(translateY(200px));
+        opacity: 0;
+    }
+}
+
+// Разные позиции взрывов
+@include keyframes(position) {
+
+    0%,
+    19.9% {
+        margin-top: 10%;
+        margin-left: 40%;
+    }
+
+    20%,
+    39.9% {
+        margin-top: 40%;
+        margin-left: 30%;
+    }
+
+    40%,
+    59.9% {
+        margin-top: 20%;
+        margin-left: 70%;
+    }
+
+    60%,
+    79.9% {
+        margin-top: 30%;
+        margin-left: 20%;
+    }
+
+    80%,
+    99.9% {
+        margin-top: 30%;
+        margin-left: 80%;
+    }
+}
+
+
+// Тряска
+@keyframes shake {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-35deg);
+    }
+
+    50% {
+        transform: rotate(35deg);
+    }
+
+    75% {
+        transform: rotate(-35deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}

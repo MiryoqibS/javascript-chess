@@ -3,9 +3,13 @@
 @use "./variables";
 @use "./global";
 
+// Utils
+@use "./animations";
+
 // Components
 @use "./header";
 @use "./player-panel";
+@use "./alert";
 @use "./board";
 @use "./cell";
 @use "./piece";
